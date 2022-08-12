@@ -112,21 +112,22 @@ def select_meshes(folders):
         for i in pose_list:
             pose_model2.append(float(input(f'\033[91mEnter value for {i}:   \033[0m')))
 
-        return hand_name, [hand_names[num2], pose_model2[:3], pose_model2[3:]]
+        return [hand_name, [hand_names[num2], pose_model2[:3], pose_model2[3:]]]
     else:
-        return hand_name
+        return [hand_name]
 
 
 if __name__ == '__main__':
 
-    directory = str(pathlib.Path(__file__).parent.resolve()) #os.getcwd()
+    directory = str(pathlib.Path(__file__).parent.resolve())
 
     folders = urdf_finder(directory=directory)
     
     if folders != None:
         results = select_meshes(folders=folders)
+        print(results)
         if len(results) == 1:
-            sim_test = sim_tester(results)
+            sim_test = sim_tester(results[0])
         elif len(results) == 2:
             sim_test = sim_tester(results[0], results[1])
         else:
