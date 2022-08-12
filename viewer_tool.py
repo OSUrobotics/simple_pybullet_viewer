@@ -12,8 +12,7 @@ import pybullet_data
 import json
 from numpy import pi
 import pathlib
-# import helper_functions as HF
-# logger = HF.colored_logging("hand_viewer")
+
 
 class sim_tester():
     """Simulator class to test different hands in."""
@@ -40,21 +39,11 @@ class sim_tester():
         cubeStartPos = [0, 0, 1]
         cubeStartOrientation = p.getQuaternionFromEuler([0, 0, 0])
         plane_id = p.loadURDF("plane.urdf")
-        hand_id = p.loadURDF(self.robot_name, useFixedBase=1, basePosition=[0,0,0.04], flags=p.URDF_USE_SELF_COLLISION|p.URDF_USE_SELF_COLLISION_INCLUDE_PARENT)#, baseOrientation=p.getQuaternionFromEuler([0, pi/2, pi/2]))
+        hand_id = p.loadURDF(self.robot_name, useFixedBase=1, basePosition=[0,0,0.0], flags=p.URDF_USE_SELF_COLLISION|p.URDF_USE_SELF_COLLISION_INCLUDE_PARENT)#, baseOrientation=p.getQuaternionFromEuler([0, pi/2, pi/2]))
 
 
         p.resetDebugVisualizerCamera(cameraDistance=.02, cameraYaw=0, cameraPitch=-89.9999,
                                 cameraTargetPosition=[0, 0.1, 0.5])
-        joint_angles = [-pi/2, 0, pi/2, 0]
-        for i in range(0, p.getNumJoints(hand_id)):
-            p.resetJointState(hand_id, i, joint_angles[i])
-            
-            p.setJointMotorControl2(hand_id, i, p.POSITION_CONTROL, targetPosition=joint_angles[i], force=0)
-            linkName = p.getJointInfo(hand_id, i)[12].decode("ascii")
-            if "sensor" in linkName:
-                LinkId.append("skip")
-            else:
-                LinkId.append(p.addUserDebugParameter(linkName, -3.14, 3.14, joint_angles[i]))
 
         if self.second_mesh_name != None:
             second_mesh_id = p.loadURDF(self.second_mesh_name[0], basePosition=self.second_mesh_name[1], baseOrientation=p.getQuaternionFromEuler(self.second_mesh_name[2]))
